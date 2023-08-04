@@ -1,4 +1,4 @@
-package com.example.viewmodellesson2
+package com.example.viewmodellesson2.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding:ActivityMainBinding
-    private val viewModel:MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     var count = 0
 
 

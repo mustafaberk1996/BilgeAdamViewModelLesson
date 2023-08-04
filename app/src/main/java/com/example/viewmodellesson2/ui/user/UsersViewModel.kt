@@ -1,10 +1,10 @@
-package com.example.viewmodellesson2
+package com.example.viewmodellesson2.ui.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.viewmodellesson2.data.model.User
+import com.example.viewmodellesson2.data.state.AdapterState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -22,25 +22,19 @@ class UsersViewModel : ViewModel() {
         User(1,"Murat", "İpek", "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"),
     )
 
-    private val _userList:MutableStateFlow<List<User>> = MutableStateFlow(users)
+    private val _userList:MutableStateFlow<MutableList<User>> = MutableStateFlow(users)
     val userList:StateFlow<List<User>> = _userList
 
-    private val _adapter:MutableSharedFlow<Adapter> = MutableSharedFlow()
-    val adapter:SharedFlow<Adapter> = _adapter
+    private val _adapterState:MutableStateFlow<AdapterState> = MutableStateFlow(AdapterState.Idle)
+    val adapterState:StateFlow<AdapterState> = _adapterState
 
 
-    sealed class Adapter{
-        object Idle:Adapter()
-        class Remove(val position:Int):Adapter()
-        class Add(val user:User,val position: Int):Adapter()
-    }
-
-
-    fun removeItem(position: Int) {
+    fun removeItem(user: User, position: Int) {
        viewModelScope.launch {
-           users.removeAt(position)
-           _userList.emit(users)
-           _adapter.emit(Adapter.Remove(position))
+           //println("userList size:${_userList.value.size} position: $index")
+           val index =_userList.value.indexOf(user)
+           _userList.value.removeAt(index)
+           _adapterState.emit(AdapterState.Remove(index))
        }
     }
 

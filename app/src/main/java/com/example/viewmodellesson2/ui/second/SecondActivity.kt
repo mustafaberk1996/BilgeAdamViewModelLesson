@@ -1,6 +1,5 @@
-package com.example.viewmodellesson2
+package com.example.viewmodellesson2.ui.second
 
-import android.media.tv.interactive.TvInteractiveAppService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,7 +15,7 @@ class SecondActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySecondBinding
 
-    private val viewModel:SecondViewModel by viewModels()
+    private val viewModel: SecondViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ViewModelLesson2</string>
+    <string name="a_product_is_added_to_the_favorites">Bir urun favoriye eklendi</string>
+    <string name="a_product_is_removed_to_the_favorites">Bir urun favorilerden cikarildi</string>
+    <string name="ok">Tamam</string>
+    <string name="undo">Geri Al</string>
 </resources>
