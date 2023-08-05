@@ -29,7 +29,7 @@ class UsersViewModel : ViewModel() {
     val adapterState:StateFlow<AdapterState> = _adapterState
 
 
-    fun removeItem(user: User, position: Int) {
+    fun removeItem(user: User) {
        viewModelScope.launch {
            //println("userList size:${_userList.value.size} position: $index")
            val index =_userList.value.indexOf(user)

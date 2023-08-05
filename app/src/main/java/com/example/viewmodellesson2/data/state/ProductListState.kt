@@ -6,7 +6,7 @@ import java.lang.Exception
 sealed class ProductListState{
     object Idle: ProductListState()
     object Loading: ProductListState()
-    class Result(val products: List<Product>): ProductListState()
+    class Result(val products: MutableList<Product>): ProductListState()
     class Error(exception: Exception): ProductListState()
 
 }

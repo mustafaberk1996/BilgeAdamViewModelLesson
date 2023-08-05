@@ -3,6 +3,7 @@ package com.example.viewmodellesson2.ui.product
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.viewmodellesson2.data.model.Product
+import com.example.viewmodellesson2.data.model.User
 import com.example.viewmodellesson2.data.state.ProductListState
 import com.example.viewmodellesson2.data.state.AdapterState
 import kotlinx.coroutines.delay
@@ -49,8 +50,8 @@ class ProductsViewModel:ViewModel() {
         viewModelScope.launch {
             _productListState.value = ProductListState.Loading
             delay(3000)
-            _productListState.value = if ((0..1).random() == 0) ProductListState.Result(productList)
-            else ProductListState.Error(NullPointerException())
+            //_productListState.value = if ((0..1).random() == 0) ProductListState.Result(productList) else ProductListState.Error(NullPointerException())
+            _productListState.value =  ProductListState.Result(productList)
         }
     }
 
@@ -64,6 +65,16 @@ class ProductsViewModel:ViewModel() {
     fun undoFavorite(product: Product) {
         viewModelScope.launch {
             _undoFavState.emit(product)
+        }
+    }
+
+    fun removeItem(removedProduct: Product) {
+        viewModelScope.launch {
+            if (_productListState.value is ProductListState.Result){
+                val index =  (_productListState.value as ProductListState.Result).products.indexOf(removedProduct)
+                (_productListState.value as ProductListState.Result).products.removeAt(index)
+                _adapterState.emit(AdapterState.Remove(index))
+            }
         }
     }
 }

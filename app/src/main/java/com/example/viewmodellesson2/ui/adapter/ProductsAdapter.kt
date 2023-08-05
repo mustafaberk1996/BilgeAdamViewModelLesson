@@ -10,7 +10,8 @@ import com.example.viewmodellesson2.R
 import com.example.viewmodellesson2.data.model.Product
 import com.example.viewmodellesson2.databinding.ProductListItemBinding
 
-class ProductsAdapter(private val context:Context, private val products:List<Product>, private val onAddRemoveFavorite:(product: Product, index:Int)->Unit):RecyclerView.Adapter<ProductsAdapter.MyViewHolder>() {
+class ProductsAdapter(private val context:Context, private val products:List<Product>,
+                      private val onClick:(product:Product)->Unit,private val onAddRemoveFavorite:(product: Product, index:Int)->Unit):RecyclerView.Adapter<ProductsAdapter.MyViewHolder>() {
 
     class MyViewHolder(binding: ProductListItemBinding):ViewHolder(binding.root){
         val tvName = binding.tvName
@@ -34,6 +35,9 @@ class ProductsAdapter(private val context:Context, private val products:List<Pro
            holder.ivProduct.load(imageUrl)
            holder.tvName.text = name
            holder.tvPrice.text = price.toString()
+           holder.itemView.setOnClickListener {
+               onClick(this)
+           }
            holder.ivAddRemoveFavorite.setImageResource(
                if (favorite) R.drawable.baseline_star_rate_24 else R.drawable.baseline_star_border_24
            )

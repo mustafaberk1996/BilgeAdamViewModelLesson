@@ -8,7 +8,7 @@ import coil.load
 import com.example.viewmodellesson2.data.model.User
 import com.example.viewmodellesson2.databinding.UserListItemBinding
 
-class UsersAdapter(private val context:Context, private val users:List<User>, val onRemove:(user: User, position:Int)->Unit):RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
+class UsersAdapter(private val context:Context, private val users:List<User>,val onClick:(user:User)->Unit , val onRemove:(user: User, position:Int)->Unit):RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
 
     class MyViewHolder(binding:UserListItemBinding):RecyclerView.ViewHolder(binding.root){
         val tvUserFullName = binding.tvUserFullName
@@ -30,6 +30,11 @@ class UsersAdapter(private val context:Context, private val users:List<User>, va
        val user = users[position]
         holder.tvUserFullName.text = "$position, ${user.name} ${user.surname}"
         holder.ivUser.load(user.profileImageUrl)
+
+
+        holder.itemView.setOnClickListener {
+            onClick(user)
+        }
 
         holder.ivRemove.setOnClickListener {
             println("adapterden gelen  position: $position")

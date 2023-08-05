@@ -1,5 +1,6 @@
 package com.example.viewmodellesson2.ui.product
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -12,7 +13,11 @@ import com.example.viewmodellesson2.data.state.AdapterState
 import com.example.viewmodellesson2.data.state.ProductListState
 import com.example.viewmodellesson2.ui.adapter.ProductsAdapter
 import com.example.viewmodellesson2.R
+import com.example.viewmodellesson2.data.model.Product
+import com.example.viewmodellesson2.data.model.User
 import com.example.viewmodellesson2.databinding.ActivityProductsBinding
+import com.example.viewmodellesson2.ui.UserDetailActivity
+import com.example.viewmodellesson2.ui.user.UsersActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -89,6 +94,9 @@ class ProductsActivity : AppCompatActivity() {
             is AdapterState.Changed ->{
                 adapter?.notifyItemChanged(adapterState.index)
             }
+           is AdapterState.Remove->{
+                adapter?.notifyItemRemoved(adapterState.index)
+           }
             else->{}
         }
     }
@@ -115,7 +123,7 @@ class ProductsActivity : AppCompatActivity() {
                 binding.rvProducts.isVisible = true
                 binding.progressBar.root.isVisible = false
 
-                adapter = ProductsAdapter(this,it.products){product,index->
+                adapter = ProductsAdapter(this,it.products,this::onClick){product,index->
                     viewModel.addOrRemoveFavorite(product,index)
                 }
                 binding.rvProducts.adapter = adapter
@@ -127,5 +135,26 @@ class ProductsActivity : AppCompatActivity() {
                 AlertDialog.Builder(this).setMessage("There is an error happened!").create().show()
             }
         }
+    }
+
+
+    companion object{
+        const val REQUEST_CODE_FOR_DELETE = 1
+        const val PRODUCT = "PRODUCT"
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_FOR_DELETE && resultCode == RESULT_OK){
+            data?.getParcelableExtra<Product>(PRODUCT)?.let { removedProduct->
+                viewModel.removeItem(removedProduct)
+            }
+        }
+    }
+    private fun onClick(product: Product){
+        val intent =  Intent(this, UserDetailActivity::class.java)
+        intent.putExtra(PRODUCT,product)
+        startActivityForResult(intent, REQUEST_CODE_FOR_DELETE)
     }
 }
